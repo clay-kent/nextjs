@@ -1,0 +1,50 @@
+// このファイルを更新したら...
+// 0. `npm run dev` や `npx prisma studio` を停止
+// 1. dev.db を削除
+// 2. npx prisma db push
+// 3. npx prisma generate
+// 4. npx prisma db seed
+
+//なお、prisma migrateを使用すれば 既存のデータを保持したままスキーマの変更を適用することも可能 ですが、開発の初期段階 (消えて困るようなデータが DB に格納されていない状態) では上記の手続きの方が確実です。
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+        
+
+// 投稿記事テーブル
+model Post {
+  id             String @id @default(uuid())
+  title          String
+  content        String
+  coverImageURL  String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  categories     PostCategory[]
+}
+
+// カテゴリテーブル
+model Category {
+  id         String @id @default(uuid())
+  name       String @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  posts      PostCategory[]
+}
+
+// 投稿記事とカテゴリを紐づける中間テーブル
+model PostCategory {
+  id          String @id @default(uuid())
+  postId      String
+  categoryId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,23 @@
+import { PrismaClient } from "@prisma/client";
+//ホットリロード時にインスタンスを再利用するための処理
+//https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-dev-practices
+
+// データベース接続用のインスタンスを作成する関数を定義
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
+
+// グローバルスコープに prismaGlobal という変数が存在することをTypeScriptに伝える型定義
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
+
+// 既存の prismaGlobal があればそれを使用し、なければ新しくインスタンスを作成
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+
+// 作成した prisma インスタンスを他から利用できるようにエクスポート
+export default prisma;
+
+// 開発環境の場合のみ、作成したインスタンスをグローバルスコープに保存し、
+// ホットリロード時の再利用を可能にする
+if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
