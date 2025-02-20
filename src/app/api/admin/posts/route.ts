@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextResponse, NextRequest } from "next/server";
-import type { Post, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client"; // typeキーワードを削除
 import { supabase } from "@/utils/supabase";
 
 type RequestBody = {
