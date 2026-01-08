@@ -55,7 +55,7 @@ const Page: React.FC = () => {
               required
               {...register("name")}
             />
-            {errors && (
+            {errors.name?.message && (
               <div className="flex items-center space-x-1 text-sm font-bold text-red-500">
                 <FontAwesomeIcon
                   icon={faTriangleExclamation}

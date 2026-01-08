@@ -14,9 +14,6 @@ const CategoryList: React.FC = () => {
         </div>
       ) : (
         <div>
-          <div className="mb-2">
-            クリックすると各カテゴリの名前編集・削除画面に移動します。
-          </div>
           <div className="flex flex-wrap gap-2">
             {data.map((category) => (
               <div

@@ -48,7 +48,7 @@ const handleImageChange = async (
     .upload(path, file, { upsert: true });
 
   if (error || !data) {
-    window.alert(`アップロードに失敗 ${error.message}`);
+    window.alert(`アップロードに失敗しました: ${error.message}`);
     return;
   }
 
@@ -102,8 +102,8 @@ const Page = () => {
         );
       } catch (error) {
         const errorMsg = error instanceof Error
-          ? `Failed to fetch categories: ${error.message}`
-          : `Unexpected error occurred: ${error}`;
+          ? `カテゴリの取得に失敗しました: ${error.message}`
+          : `予期しないエラーが発生しました: ${error}`;
         console.error(errorMsg);
         setFetchErrorMsg(errorMsg);
       } finally {
@@ -172,8 +172,8 @@ const Page = () => {
       router.push(`/posts/${postResponse.id}`);
     } catch (error) {
       const errorMsg = error instanceof Error
-        ? `Failed to create post: ${error.message}`
-        : `Unexpected error occurred: ${error}`;
+        ? `投稿の作成に失敗しました: ${error.message}`
+        : `予期しないエラーが発生しました: ${error}`;
         console.error(errorMsg);
         window.alert(errorMsg);
         setIsSubmitting(false);
@@ -190,7 +190,7 @@ const Page = () => {
 
     return (
       <main>
-        <div className="mb-4 text-2xl font-bold">Create New Post</div>
+        <div className="mb-4 text-2xl font-bold">投稿の作成</div>
 
         <SubmittingOverlay isSubmitting={isSubmitting} />
 
@@ -200,7 +200,7 @@ const Page = () => {
         >
           <div className="space-y-1">
             <label htmlFor="title" className="block font-bold">
-              Title
+              タイトル
             </label>
             <input
               type="text"
@@ -209,14 +209,13 @@ const Page = () => {
               className="w-full rounded-md border-2 px-2 py-1"
               value={newTitle}
               onChange={updateNewTitle}
-              placeholder="Enter post title"
               required
             />
           </div>
 
           <div className="space-y-1">
             <label htmlFor="content" className="block font-bold">
-              Content
+              内容
             </label>
             <textarea
               id="content"
@@ -224,14 +223,13 @@ const Page = () => {
               className="h-48 w-full rounded-md border-2 px-2 py-1"
               value={newContent}
               onChange={updateNewContent}
-              placeholder="Enter post content"
               required
             />
           </div>
 
           <div className="space-y-1">
             <label htmlFor="imgSelector" className="block font-bold">
-              Cover Image
+              カバー画像URL
             </label>
             <input
               id="imgSelector"
@@ -267,7 +265,7 @@ const Page = () => {
           </div>
 
           <div className="space-y-1">
-            <div className="font-bold">Categories</div>
+            <div className="font-bold">カテゴリー</div>
             <div className="flex flex-wrap gap-x-3.5">
               {checkableCategories.length > 0 ? (
                 checkableCategories.map((category) => (
@@ -283,7 +281,7 @@ const Page = () => {
                   </label>
                 ))
               ) : (
-                <div>No categories available.</div>
+                <div>カテゴリがありません。</div>
               )}
             </div>
           </div>
@@ -292,8 +290,8 @@ const Page = () => {
             <Button
               type="submit"
               disabled={isSubmitting}
-            >
-              Create Post
+              >
+              作成
             </Button>
           </div>
         </form>
