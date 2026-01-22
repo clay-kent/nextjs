@@ -1,0 +1,22 @@
+name: Prevent Supabase Sleep (Daily Ping)
+
+on:
+  schedule:
+    # Runs at 6:12 AM UTC (3:12 PM JST)
+    - cron: "12 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  make_request:
+    runs-on: ubuntu-latest
+    env:
+      TZ: "Asia/Tokyo"
+
+    steps:
+      - name: Send HTTP GET request
+        run: |
+          curl -X GET "https://nextjs-8kp7m3a3t-clay-projects.vercel.app/" -v --fail || exit 1
+
+      - name: Log request time
+        run: |
+          echo "Keep-alive ping completed at $(date)"
