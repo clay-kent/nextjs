@@ -2,8 +2,7 @@ name: Prevent Supabase Sleep (Daily Ping)
 
 on:
   schedule:
-    # Runs at 6:12 AM UTC (3:12 PM JST)
-    - cron: "12 6 * * *"
+    - cron: "20 5 * * *"
   workflow_dispatch:
 
 jobs:
