@@ -10,13 +10,22 @@ interface PostSummaryProps {
 }
 
 const PostSummary: React.FC<PostSummaryProps> = ({ post }) => {
+  const categoryNames = (post.categories || [])
+    .map((c) => c.name?.trim())
+    .filter(Boolean) as string[];
+
   return (
     <Link href={`/posts/${post.id}`}>
       <div className="mb-4 rounded-md border p-4">
         <h2 className="text-xl font-bold">{post.title}</h2>
         <div className="mb-2 text-sm text-gray-500">
-          {dayjs(post.createdAt).format("YYYY-MM-DD")} |{" "}
-          {post.categories.map((category) => category.name).join(", ")}{" "}
+          {dayjs(post.createdAt).format("YYYY-MM-DD")}
+          {categoryNames.length > 0 && (
+            <>
+              {' '}
+              | {categoryNames.join(", ")}
+            </>
+          )}
           {/*TODO: category Component*/}
         </div>
         <div

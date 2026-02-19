@@ -16,7 +16,9 @@ export const usePost = (id: string, options: UsePostOptions = {}) => {
 
     try {
       const endpoint = options.isAdmin ? `/api/admin/posts/${id}` : `/api/posts/${id}`;
-      const response = await fetch(endpoint);
+      const response = await fetch(endpoint, {
+        cache: "no-store",
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch post");
       }

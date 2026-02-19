@@ -29,13 +29,22 @@ const Page = () => {
     return <div>指定idの投稿の取得に失敗しました。</div>;
   }
 
+  const categoryNames = (post.categories || [])
+    .map((c) => c.name?.trim())
+    .filter(Boolean) as string[];
+
   return (
     <main>
       <div className="space-y-4">
         <h1 className="text-2xl font-bold">{post.title}</h1>
         <div className="text-sm text-gray-500">
-          {dayjs(post.createdAt).format("YYYY-MM-DD")} |{" "}
-          {post.categories.map((category) => category.name).join(", ")}
+          {dayjs(post.createdAt).format("YYYY-MM-DD")}
+          {categoryNames.length > 0 && (
+            <>
+              {' '}
+              | {categoryNames.join(", ")}
+            </>
+          )}
         </div>
         {post.coverImage && (
           <div>
