@@ -5,11 +5,10 @@
 ## 概要
 
 技術ブログを想定した個人向け CMS アプリ
+
 ブログの閲覧だけでなく、管理者としてログインして記事・カテゴリの作成・編集・削除を行えます。
 
-### 開発の背景・経緯
-
-フロントエンドの学習として Next.js App Router・Prisma・Supabase を一通り組み合わせた実装経験を積むことを目的に開発しました。
+フロントエンドの学習として Next.js App Router・Prisma・Supabase を一通り組み合わせた実装経験を積むことを目的に開発した習作です。
 
 ## 特徴と機能
 
@@ -33,7 +32,6 @@
 - タイトル・本文（リッチテキスト）・カバー画像・カテゴリを設定して記事を投稿できます。
 - カバー画像は Supabase Storage にアップロードし、MD5 ハッシュによる重複排除を行っています。
 - React Hook Form + zod によるフォームバリデーションを実装しています。
-- 削除前には確認ダイアログを表示し、誤操作を防止しています。
 
 ![カテゴリ編集画面](docs/screenshots/category_edit.png)
 
@@ -44,6 +42,7 @@
 ## 使用技術（技術スタック）
 
 言語: TypeScript
+
 フレームワーク: Next.js 16 (App Router)
 
 ### ライブラリ
@@ -59,12 +58,16 @@
 | 通知 | react-toastify |
 | セキュリティ系 | isomorphic-dompurify（XSS 対策）, crypto-js（MD5 ハッシュ） |
 | 日付処理 | dayjs |
+
 ### 開発ツール・サービス
 
-IDE: VSCode
-データベース: Supabase (PostgreSQL)
-ストレージ: Supabase Storage
-デプロイ: Vercel
+| 分類 | 名前 |
+| --- | --- |
+| データベース | Supabase (PostgreSQL) |
+| ストレージ | Supabase Storage |
+| デプロイ | Vercel |
+| リンター | eslint |
+| フォーマッター | prettier |
 
 ### システム構成図
 
@@ -82,7 +85,6 @@ graph TD
     Vercel -->|signIn / signOut| Supabase_Auth
     Vercel -->|CRUD via Prisma| Supabase_DB
     Vercel -->|画像アップロード / 取得| Supabase_Storage
-    Vercel -->|質問応答| HuggingFace
     GA -->|定期 GET /api/ping-supabase| Vercel
     Vercel -->|DB クエリ（スリープ防止）| Supabase_DB
 ```
@@ -101,7 +103,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...  # Supabase 匿名キー
 PING_SECRET=...           # GitHub Actions からの Ping リクエスト認証用シークレット
 ```
 
-### インストール・起動
+### インストール・開発サーバー起動
 
 ```bash
 # 依存パッケージインストール
