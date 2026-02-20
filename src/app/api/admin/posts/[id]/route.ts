@@ -3,9 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { Post, Category } from "@prisma/client";
 
 type RouteParams = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 type RequestBody = {
@@ -17,7 +15,7 @@ type RequestBody = {
 
 export const GET = async (req: NextRequest, routeParams: RouteParams) => {
   try {
-    const id = routeParams.params.id;
+    const { id } = await routeParams.params;
     const post = await prisma.post.findUnique({
       where: { id },
       include: {
@@ -44,7 +42,7 @@ export const GET = async (req: NextRequest, routeParams: RouteParams) => {
 
 export const PUT = async (req: NextRequest, routeParams: RouteParams) => {
   try {
-    const id = routeParams.params.id;
+    const { id } = await routeParams.params;
     const { title, content, coverImageURL, categoryIds }: RequestBody = await req.json();
 
     if (!title || !content || !coverImageURL || !categoryIds) {
@@ -79,7 +77,7 @@ export const PUT = async (req: NextRequest, routeParams: RouteParams) => {
 
 export const DELETE = async (req: NextRequest, routeParams: RouteParams) => {
   try {
-    const id = routeParams.params.id;
+    const { id } = await routeParams.params;
     const post: Post = await prisma.post.delete({ where: { id } });
     return NextResponse.json({ msg: `投稿「${post.title}」を削除しました。` });
   } catch (error) {

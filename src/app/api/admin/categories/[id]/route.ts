@@ -3,9 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { Category } from "@prisma/client";
 
 type RouteParams = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 type RequestBody = {
@@ -14,7 +12,7 @@ type RequestBody = {
 
 export const PUT = async (req: NextRequest, routeParams: RouteParams) => {
   try {
-    const id = routeParams.params.id;
+    const { id } = await routeParams.params;
     const { name }: RequestBody = await req.json();
     const category: Category = await prisma.category.update({
       where: { id },
@@ -32,7 +30,7 @@ export const PUT = async (req: NextRequest, routeParams: RouteParams) => {
 
 export const DELETE = async (req: NextRequest, routeParams: RouteParams) => {
   try {
-    const id = routeParams.params.id;
+    const { id } = await routeParams.params;
     const category: Category = await prisma.category.delete({ where: { id } });
     return NextResponse.json({ msg: `「${category.name}」を削除しました。` });
   } catch (error) {
