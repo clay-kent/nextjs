@@ -21,7 +21,7 @@ const Page: React.FC = () => {
         <div className="text-center md:text-left">
           <h1 className="text-5xl font-extrabold mb-4 text-slate-900 tracking-tight">Clay Kent</h1>
           <p className="text-xl text-slate-600 mb-6 font-medium">
-            大阪公立大学工業高等専門学校 知能情報コース
+            大阪公立大学工業高等専門学校<br/>知能情報コース
           </p>
           <div className="flex justify-center md:justify-start gap-4">
             <a
@@ -48,8 +48,8 @@ const Page: React.FC = () => {
               技術のレイヤーを問わず「ものづくり」を追求。
             </p>
             <p className="mt-4">
-              また、Minecraftを中心としたコミュニティ活動にも長年携わっており<br/>
-              コマンド・Mod開発からコミュニティ運営までこなすマルチクリエイターとして活動している。
+              また、Minecraftコミュニティでも長年活動しており<br/>
+              コマンド・Mod開発からサーバー運営までこなすマルチクリエイター。
             </p>
           </div>
         </section>

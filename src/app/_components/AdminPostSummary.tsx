@@ -25,7 +25,11 @@ export const AdminPostSummary: React.FC<Props> = ({ post, onDelete }) => {
   return (
     <div className="flex items-center justify-between border-b border-gray-200 py-4">
       <div className="flex-1">
-        <h2 className="text-xl font-semibold">{post.title}</h2>
+        <h2 className="text-xl font-semibold">
+          <Link href={`/posts/${post.id}`} className="hover:underline">
+            {post.title}
+          </Link>
+        </h2>
         <p className="text-sm text-gray-500">
           作成日: {new Date(post.createdAt).toLocaleDateString("ja-JP")}
         </p>
