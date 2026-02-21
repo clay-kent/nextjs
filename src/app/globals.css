@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* mermaid: コンテナ (pre/div) の背景・パディングのみリセット */
+.mermaid,
+pre.mermaid,
+pre:has(> svg) {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  /* prose の color 継承を断ち切り SVG 内部の currentColor を保護 */
+  color: unset !important;
+}
+
+/* mermaid SVG 内部は一切干渉しない */
+.mermaid svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+.mermaid svg * {
+  color: revert;
+}
