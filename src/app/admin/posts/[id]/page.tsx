@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePost } from "@/app/_hooks/usePost";
 import { useEditPost } from "@/app/_hooks/useEditPost";
 import { useCategories } from "@/app/_hooks/useCategories";
@@ -12,10 +12,12 @@ import SubmittingOverlay from "@/app/_components/SubmittingOverlay";
 export default function EditPostPage({
   params,
 }: {
-  params: { id: string };
+  params: any;
 }) {
   const router = useRouter();
-  const { post, isLoading: isLoadingPost, error: postError } = usePost(params.id, { isAdmin: true });
+  const resolvedParams = React.use(params);
+  const id = resolvedParams?.id;
+  const { post, isLoading: isLoadingPost, error: postError } = usePost(id, { isAdmin: true });
   const { data: categories, isLoading: isLoadingCategories } = useCategories();
   const { editPost, isSubmitting } = useEditPost();
 
@@ -43,7 +45,7 @@ export default function EditPostPage({
       return;
     }
 
-    const success = await editPost(params.id, {
+    const success = await editPost(id, {
       title: title.trim(),
       content: content.trim(),
       coverImageURL: coverImageURL.trim(),
