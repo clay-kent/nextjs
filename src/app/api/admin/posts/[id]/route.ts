@@ -18,8 +18,19 @@ export const GET = async (req: NextRequest, routeParams: RouteParams) => {
     const { id } = await routeParams.params;
     const post = await prisma.post.findUnique({
       where: { id },
-      include: {
-        categories: true,
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        coverImageURL: true,
+        createdAt: true,
+        categories: {
+          select: {
+            category: {
+              select: { id: true, name: true },
+            },
+          },
+        },
       },
     });
 
@@ -30,7 +41,12 @@ export const GET = async (req: NextRequest, routeParams: RouteParams) => {
       );
     }
 
-    return NextResponse.json(post);
+    const transformedPost = {
+      ...post,
+      categories: post.categories.map((c) => c.category),
+    };
+
+    return NextResponse.json(transformedPost);
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -52,13 +68,15 @@ export const PUT = async (req: NextRequest, routeParams: RouteParams) => {
       );
     }
 
+    await prisma.postCategory.deleteMany({ where: { postId: id } });
+
     const updateData: any = {
       title,
       content,
-      categories: {
-        set: categoryIds.map((id) => ({ id })),
-      },
       updatedAt: new Date(),
+      categories: {
+        create: categoryIds.map((categoryId) => ({ categoryId })),
+      },
     };
 
     if (coverImageURL) {
