@@ -16,13 +16,16 @@
 ### 1. 記事一覧・詳細閲覧（一般ユーザー向け）
 
 ログイン不要で全記事を閲覧できます。カテゴリ一覧から絞り込みも可能です。
+
+画像やmermaidの表示機能や、コードブロックの装飾機能があります。
 ![ホーム画面](docs/screenshots/homepage.png)
 
 
 ### 2. 管理者ログイン（Supabase Auth）
 
 メールアドレスとパスワードによる認証を Supabase Auth で実装しています。  
-未ログイン状態で `/admin` 以下にアクセスするとログインページへリダイレクトされます（ルートガード実装済み）。
+
+未ログイン状態で `/admin` 以下にアクセスするとログインページへリダイレクトされます。
 
 ![ログイン画面](docs/screenshots/login.png)
 
@@ -58,6 +61,9 @@
 | 通知 | react-toastify |
 | セキュリティ系 | isomorphic-dompurify（XSS 対策）, crypto-js（MD5 ハッシュ） |
 | 日付処理 | dayjs |
+| コードブロック | PrismJS |
+| 図表示 | mermaid |
+
 
 ### 開発ツール・サービス
 
@@ -77,8 +83,7 @@ graph TD
     Vercel["Vercel\n(Next.js App)"]
     Supabase_Auth["Supabase Auth\n(認証)"]
     Supabase_DB["Supabase\nPostgreSQL (Prisma)"]
-    Supabase_Storage["Supabase Storage\n(カバー画像)"]
-    HuggingFace["Hugging Face\nInference API"]
+    Supabase_Storage["Supabase Storage\n(画像)"]
     GA["GitHub Actions\n(定期 Ping)"]
 
     User -->|HTTPS| Vercel
@@ -86,7 +91,6 @@ graph TD
     Vercel -->|CRUD via Prisma| Supabase_DB
     Vercel -->|画像アップロード / 取得| Supabase_Storage
     GA -->|定期 GET /api/ping-supabase| Vercel
-    Vercel -->|DB クエリ（スリープ防止）| Supabase_DB
 ```
 
 ## セットアップ手順
@@ -100,7 +104,6 @@ DATABASE_URL=...          # Prisma が接続する PostgreSQL（Supabase の接�
 DIRECT_URL=...            # Prisma マイグレーション用の直接接続 URL
 NEXT_PUBLIC_SUPABASE_URL=...       # Supabase プロジェクト URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...  # Supabase 匿名キー
-PING_SECRET=...           # GitHub Actions からの Ping リクエスト認証用シークレット
 ```
 
 ### インストール・開発サーバー起動
