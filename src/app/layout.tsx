@@ -27,7 +27,7 @@ const RootLayout: React.FC<Props> = (props) => {
         <Header />
         <PrismInit />
         <MermaidInit />
-        <div className="mx-4 mt-2 max-w-2xl md:mx-auto">{children}</div>
+        <div className="mx-4 mt-2 mb-8 max-w-2xl md:mx-auto">{children}</div>
       </body>
     </html>
   );
