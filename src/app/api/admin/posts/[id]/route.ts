@@ -9,7 +9,7 @@ type RouteParams = {
 type RequestBody = {
   title: string;
   content: string;
-  coverImageURL: string;
+  coverImageURL?: string;
   categoryIds: string[];
 };
 
@@ -45,24 +45,29 @@ export const PUT = async (req: NextRequest, routeParams: RouteParams) => {
     const { id } = await routeParams.params;
     const { title, content, coverImageURL, categoryIds }: RequestBody = await req.json();
 
-    if (!title || !content || !coverImageURL || !categoryIds) {
+    if (!title || !content || !categoryIds || categoryIds.length === 0) {
       return NextResponse.json(
-        { error: "全てのフィールドは必須です" },
+        { error: "タイトル・内容・カテゴリーは必須です" },
         { status: 400 }
       );
     }
 
+    const updateData: any = {
+      title,
+      content,
+      categories: {
+        set: categoryIds.map((id) => ({ id })),
+      },
+      updatedAt: new Date(),
+    };
+
+    if (coverImageURL) {
+      updateData.coverImageURL = coverImageURL;
+    }
+
     const post: Post = await prisma.post.update({
       where: { id },
-      data: {
-        title,
-        content,
-        coverImageURL,
-        categories: {
-          set: categoryIds.map((id) => ({ id })),
-        },
-        updatedAt: new Date(),
-      },
+      data: updateData,
     });
 
     return NextResponse.json(post);

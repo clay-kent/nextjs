@@ -3,7 +3,7 @@ import { useState } from "react";
 type EditPostData = {
   title: string;
   content: string;
-  coverImageURL: string;
+  coverImageURL?: string;
   categoryIds: string[];
 };
 
