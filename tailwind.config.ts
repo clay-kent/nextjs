@@ -9,6 +9,7 @@ const config: Config = {
   ],
   theme: {},
   plugins: [
+    require('@tailwindcss/typography'),
     plugin(function ({ addComponents }: { addComponents: (components: Record<string, any>) => void }) {
       addComponents({
         ".section-title": {
