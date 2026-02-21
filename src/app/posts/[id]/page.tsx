@@ -1,16 +1,29 @@
 "use client";
 import { useParams } from "next/navigation";
+import React, { useEffect } from "react";
 import { usePost } from "@/app/_hooks/usePost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { sanitizeHTML } from "@/app/_utils/sanitizeHTML";
+import Prism from "prismjs";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-python";
+import { runMermaid } from "@/app/_components/MermaidInit";
 import dayjs from "dayjs";
 import Link from "next/link";
 
 const Page = () => {
   const { id } = useParams() as { id: string };
   const { post, isLoading, error } = usePost(id);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  // post の DOM が確定した後にシンタックスハイライトと mermaid を実行
+  useEffect(() => {
+    if (!post || !contentRef.current) return;
+    Prism.highlightAllUnder(contentRef.current);
+    runMermaid();
+  }, [post]);
 
   if (error) {
     return <div>{error}</div>;
@@ -59,6 +72,7 @@ const Page = () => {
           </div>
         )}
         <div
+          ref={contentRef}
           className="prose max-w-none"
           dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
         />
