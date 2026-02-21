@@ -12,11 +12,10 @@ import SubmittingOverlay from "@/app/_components/SubmittingOverlay";
 export default function EditPostPage({
   params,
 }: {
-  params: any;
+  params: Promise<{ id: string }>;
 }) {
   const router = useRouter();
-  const resolvedParams = React.use(params);
-  const id = resolvedParams?.id;
+  const { id } = React.use(params);
   const { post, isLoading: isLoadingPost, error: postError } = usePost(id, { isAdmin: true });
   const { data: categories, isLoading: isLoadingCategories } = useCategories();
   const { editPost, isSubmitting } = useEditPost();
@@ -40,17 +39,22 @@ export default function EditPostPage({
     e.preventDefault();
     setSubmitError(null);
     
-    if (!title.trim() || !content.trim() || !coverImageURL.trim() || selectedCategoryIds.length === 0) {
-      setSubmitError("全てのフィールドは必須です");
+    if (!title.trim() || !content.trim() || selectedCategoryIds.length === 0) {
+      setSubmitError("タイトル・内容・カテゴリーは必須です");
       return;
     }
 
-    const success = await editPost(id, {
+    const payload: any = {
       title: title.trim(),
       content: content.trim(),
-      coverImageURL: coverImageURL.trim(),
       categoryIds: selectedCategoryIds,
-    });
+    };
+
+    if (coverImageURL.trim()) {
+      payload.coverImageURL = coverImageURL.trim();
+    }
+
+    const success = await editPost(id, payload);
 
     if (success) {
       router.push("/admin/posts");
@@ -126,7 +130,6 @@ export default function EditPostPage({
             value={coverImageURL}
             onChange={(e) => setCoverImageURL(e.target.value)}
             className="w-full rounded-md border p-2"
-            required
           />
         </div>
 
